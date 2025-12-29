@@ -744,14 +744,15 @@ document.getElementById('prod-sell3').value = product.sellPrice3;
             if(existing) {
                 existing.qty++;
             } else {
-                currentCart.push({
-                    id: prod.id,
-                    name: prod.name,
-                    price: prod.sellPrice,
-                    qty: 1,
-                    originalPrice: prod.sellPrice,
-                    measure: prod.measure
-                });
+               currentCart.push({
+    id: prod.id,
+    name: prod.name,
+    price: prod.sellPrice1,          // 👈 precio activo
+    qty: 1,
+    originalPrice: prod.sellPrice1,  // 👈 respaldo
+    measure: prod.measure
+});
+
             }
             updateCartUI();
         }
@@ -1641,6 +1642,7 @@ document.getElementById('prod-sell3').value = product.sellPrice3;
 </body>
 
 </html>
+
 
 
 
