@@ -212,9 +212,15 @@
             setTimeout(() => toast.classList.add('translate-y-32'), 3000);
         }
 
-        function formatMoney(amount) {
-            return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(amount);
-        }
+       function formatMoney(amount) {
+    return new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(amount);
+}
+
 
         function generateId() {
             return Date.now().toString(36) + Math.random().toString(36).substr(2);
@@ -1668,6 +1674,7 @@ document.getElementById('prod-sell3').value = product.sellPrice3;
 </body>
 
 </html>
+
 
 
 
