@@ -112,6 +112,11 @@
                         <i class="fas fa-cog w-6 text-slate-400 group-hover:text-amber-500"></i> Administración
                     </a>
                 </nav>
+                <button id="exportarDatos">📤 Exportar datos</button>
+                <input type="file" id="importarArchivo" accept=".json" hidden>
+<button id="importarDatos">📥 Importar datos</button>
+
+
             </div>
             <div class="p-4 border-t border-slate-800">
                 <button onclick="logout()" class="w-full py-2 px-4 bg-red-900/50 hover:bg-red-800 text-red-200 rounded border border-red-800 text-sm transition flex items-center justify-center gap-2">
@@ -1673,10 +1678,68 @@ document.getElementById('prod-sell3').value = product.sellPrice3;
             return Object.values(productMap).sort((a, b) => b.total - a.total).slice(0, 10);
         }
 
+document.getElementById("exportarDatos").addEventListener("click", () => {
+  // Obtenemos todo el localStorage del proyecto
+  const todosLosDatos = {};
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+
+    // Solo exportamos keys que empiecen con "POS-Distribuidora"
+    if (key.startsWith("POS-Distribuidora")) {
+      todosLosDatos[key] = JSON.parse(localStorage.getItem(key));
+    }
+  }
+
+  const dataStr = JSON.stringify(todosLosDatos, null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "backup_POS-Distribuidora.json";
+  a.click();
+
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById("importarDatos").addEventListener("click", () => {
+  document.getElementById("importarArchivo").click();
+});
+
+document.getElementById("importarArchivo").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = () => {
+    try {
+      const nuevoData = JSON.parse(reader.result);
+
+      if (!confirm("Esto reemplazará datos actuales. ¿Continuar?")) return;
+
+      // Guardamos cada key en localStorage
+      Object.keys(nuevoData).forEach(key => {
+        localStorage.setItem(key, JSON.stringify(nuevoData[key]));
+      });
+
+      alert("Datos importados correctamente 🎉");
+      location.reload(); // recarga para que todo tome efecto
+    } catch (err) {
+      alert("Archivo inválido ❌");
+    }
+  };
+
+  reader.readAsText(file);
+});
+
+
     </script>
 </body>
 
 </html>
+
 
 
 
